@@ -55,3 +55,24 @@ def get_expense(expense_id: int):
         if expense['id'] == expense_id:
             return expense
     raise HTTPException(status_code=404, detail="Expense not found!")
+
+@app.put("/expenses/{expense_id}")
+def update_expense(expense_id: int, updated: Expense):
+    for expense in expenses_db:
+        if expense['id'] == expense_id:
+            expense["amount"] = updated.amount
+            expense["category"] = updated.category
+            expense["description"] = updated.description
+            return {"message": "Updated!", "data": expense}
+        
+    raise HTTPException(status_code=404, detail="Expense not found")
+
+@app.delete("/expenses/{expense_id}")
+def delete_expense(expense_id: int):
+    for i, expense in enumerate(expenses_db):
+        if expense['id'] == expense_id:
+            expenses_db.pop(i)
+            return {"message": "Deleted!"}
+    raise HTTPException(status_code=404, detail="Expense not found")
+
+        
