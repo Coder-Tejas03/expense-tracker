@@ -31,9 +31,13 @@ expenses_db = []
 
 @app.post("/expenses")
 def add_expense(expense: Expense):
-    expenses_db.append(expense.model_dump())
+    expense_data = expense.model_dump()
+    expense_data["id"] = len(expenses_db) + 1
+    expenses_db.append(expense_data)
     return {"message": "Added!", "data": expense}
     
 @app.get("/expenses")
 def get_expenses():
     return expenses_db
+
+
